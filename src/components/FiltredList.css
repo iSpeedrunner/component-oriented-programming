@@ -1,0 +1,46 @@
+.filtered-list {
+  background-color: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-top: 20px;
+}
+
+.filtered-list-title {
+  margin: 0 0 20px;
+  font-size: 18px;
+  color: #374151;
+}
+
+.filtered-list select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: white;
+  color: #374151;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.country-list {
+  margin-top: 20px;
+}
+
+.country-item {
+  padding: 15px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.country-item h4 {
+  margin: 0 0 8px;
+  color: #111827;
+}
+
+.country-item p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #6b7280;
+}
