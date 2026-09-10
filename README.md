@@ -1,16 +1,187 @@
-# React + Vite
+# Лабораторна робота №1
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Компонентно-орієнтоване програмування
 
-Currently, two official plugins are available:
+### Simple Dashboard Widgets — World Bank
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+> **Тема:** Світова економіка — World Bank
+> **Мета:** Ознайомитися з базовими принципами компонентного підходу у React та створити набір простих інтерактивних компонентів.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Мета роботи
 
-## Expanding the ESLint configuration
+Розробити простий dashboard на **React + Vite**, який демонструє основні принципи компонентно-орієнтованого програмування:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* декомпозицію інтерфейсу на окремі компоненти;
+* повторне використання компонентів;
+* передачу даних через `props`;
+* локальний стан компонентів за допомогою `useState`;
+* обробку подій користувача;
+* умовний рендеринг;
+* роботу зі списками та їх фільтрацію;
+* односторонній потік даних.
+
+> На цьому етапі реальний API World Bank **не підключається**. Для роботи використовуються локальні тестові дані.
+
+---
+
+## Технології
+
+* **React**
+* **Vite**
+* **JavaScript (JSX)**
+* **CSS**
+* **React Hooks (`useState`)**
+
+---
+
+## Реалізовані компоненти
+
+### 1. KPI Card
+
+Компонент для відображення ключових показників світової економіки.
+
+На dashboard використовуються декілька карток із різними значеннями:
+
+* **Total GDP** — загальний ВВП;
+* **Population** — населення;
+* **Life Expectancy** — очікувана тривалість життя.
+
+Компонент є повторно використовуваним та отримує дані через `props`.
+
+---
+
+### 2. Counter / Stepper
+
+Інтерактивний лічильник кількості країн.
+
+Можливості:
+
+* збільшення значення кнопкою `+`;
+* зменшення значення кнопкою `−`;
+* скидання значення кнопкою `Reset`;
+* обмеження допустимого діапазону.
+
+Для зберігання значення використовується React Hook `useState`.
+
+---
+
+### 3. Toggle
+
+Перемикач показника, який дозволяє змінювати режим відображення даних.
+
+Доступні режими:
+
+* **GDP**
+* **Population**
+
+Залежно від поточного стану компонент відображає відповідне значення за допомогою умовного рендерингу.
+
+---
+
+### 4. Filtered List
+
+Список країн із можливістю фільтрації за регіоном.
+
+Користувач може вибрати:
+
+* `All regions`;
+* `Europe`;
+* `Asia`;
+* `Latin America`.
+
+Після вибору регіону список автоматично оновлюється та відображає лише відповідні країни.
+
+Дані зберігаються в локальному масиві-заглушці.
+
+---
+
+## Структура проєкту
+
+```text
+src/
+├── components/
+│   ├── KpiCard.jsx
+│   ├── KpiCard.css
+│   ├── Counter.jsx
+│   ├── Counter.css
+│   ├── Toggle.jsx
+│   ├── Toggle.css
+│   ├── FilteredList.jsx
+│   └── FilteredList.css
+│
+├── data/
+│   └── countries.js
+│
+├── App.jsx
+├── App.css
+├── index.css
+└── main.jsx
+```
+
+---
+
+## Основні принципи
+
+Під час виконання лабораторної роботи використано:
+
+**Component Decomposition**
+Інтерфейс розділено на незалежні компоненти.
+
+**Single Responsibility**
+Кожен компонент відповідає за свою окрему функцію.
+
+**Props**
+Дані для повторно використовуваних компонентів передаються через `props`.
+
+**Local State**
+Інтерактивні компоненти зберігають власний стан через `useState`.
+
+**Event Handling**
+Для взаємодії з користувачем використовуються `onClick` та `onChange`.
+
+**Conditional Rendering**
+Вміст компонента змінюється залежно від його поточного стану.
+
+**List Rendering**
+Список країн формується за допомогою `.map()` з використанням унікального `key`.
+
+**Immutable Updates**
+Стан оновлюється без прямої зміни існуючих даних.
+
+---
+
+## Запуск проєкту
+
+### Встановлення залежностей
+
+```bash
+npm install
+```
+
+### Запуск у режимі розробки
+
+```bash
+npm run dev
+```
+
+Після запуску Vite надасть локальну адресу для перегляду dashboard у браузері.
+
+---
+
+## Подальший розвиток
+
+У наступних лабораторних роботах dashboard може бути розширений:
+
+* підключенням реального **World Bank API**;
+* таблицею економічних показників;
+* графіками динаміки показників за роками;
+* пошуком та вибором окремої країни;
+* drilldown країна → декілька показників → динаміка за роками.
+
+---
+
+## Результат
+
+У результаті виконання лабораторної роботи створено простий інтерактивний dashboard на React, який демонструє базові принципи **компонентно-орієнтованого програмування** та роботу з локальними даними.
