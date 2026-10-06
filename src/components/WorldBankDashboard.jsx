@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getCountries } from "../../services/worldBankApi";
+import CountryTable from "./CountryTable";
 
 function WorldBankDashboard() {
     const[countries, setCountris] = useState([]);
@@ -39,7 +40,8 @@ function WorldBankDashboard() {
     return(
         <div>
             <h2>World Bank Dashboard</h2>
-            <p>Loaded countries: {countries.length}</p>
+            
+            <CountryTable countries={countries}/>
         </div>
     )
 
