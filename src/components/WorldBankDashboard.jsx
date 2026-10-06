@@ -7,6 +7,9 @@ function WorldBankDashboard() {
     const[loading, setLoading] = useState(true);
     const[error, setError] = useState(null);
 
+    const[sortField, setSortField] = useState("name");
+    const[sortDirection, setSortDirection] = useState("asc");
+
     useEffect(() => {
         async function loadCountries() {
             try{
@@ -23,6 +26,36 @@ function WorldBankDashboard() {
 
         loadCountries();
     } , []);
+
+    function handleSort(field) {
+        if (sortField === field) {
+            setSortDirection(
+                sortDirection === "asc" ? "desc" : "asc"
+            );
+        } else {
+            setSortField(field);
+            setSortDirection("asc");
+        }
+    }
+
+    const sortedCountries = [...countries].sort((a,b) => {
+        if(sortField === "name") {
+            return sortDirection === "asc" 
+            ? a.name.localeCompare(b.name)
+            : b.name.localeCompare(a.name);
+        }
+
+        if(sortField === "population") {
+            const populationA = a.population ?? 0;
+            const populationB = b.population ?? 0;
+
+            return sortDirection === "asc" 
+                ? populationA - populationB
+                : populationB - populationA;
+        }
+
+        return 0;
+    })
 
     if(loading) {
         return <p>Loading...</p>
@@ -41,7 +74,11 @@ function WorldBankDashboard() {
         <div>
             <h2>World Bank Dashboard</h2>
             
-            <CountryTable countries={countries}/>
+            <CountryTable 
+                countries={sortedCountries}
+                onSort={handleSort}
+                sortField={sortField}
+                sortDirection={sortDirection}/>
         </div>
     )
 

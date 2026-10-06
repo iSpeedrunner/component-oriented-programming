@@ -32,14 +32,25 @@ function formatUnemployment(value) {
   return `${value.toFixed(1)}%`;
 }
 
-function CountryTable({ countries }) {
+function CountryTable({ countries, onSort, sortField, sortDirection }) {
   return (
     <table>
       <thead>
         <tr>
-          <th>Country</th>
+          <th onClick={() => onSort("name")}>
+            Country
+
+            {sortField === "name" && (
+              sortDirection === "asc" ? " ↑" : " ↓"
+            )}  
+          </th>
           <th>Region</th>
-          <th>Population</th>
+          <th onClick={() => onSort("population")}>
+            Population
+            {sortField === "population" && (
+                sortDirection === "asc" ? " ↑" : " ↓"
+            )}  
+          </th>
           <th>GDP</th>
           <th>Life Expectancy</th>
           <th>Unemployment</th>
