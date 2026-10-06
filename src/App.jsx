@@ -3,6 +3,7 @@ import KpiCard from './components/KpiCard'
 import Counter from './components/Counter'
 import Toggle from './components/Toggle'
 import FilteredList from './components/FilteredList'
+import WorldBankDashboard from './components/WorldBankDashboard'
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
       <Counter />
       <Toggle />
       <FilteredList />
+
+      <WorldBankDashboard />
     </div>
   )
 }
