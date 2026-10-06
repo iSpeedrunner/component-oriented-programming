@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getCountries } from "../../services/worldBankApi";
 import CountryTable from "./CountryTable";
+import KpiCard from "./KpiCard";
 
 function WorldBankDashboard() {
     const[countries, setCountris] = useState([]);
@@ -55,7 +56,31 @@ function WorldBankDashboard() {
         }
 
         return 0;
-    })
+    });
+
+    const totalPopulation = countries.reduce(
+        (sum, country) => sum + (country.population ?? 0),
+        0
+    );
+
+    const totalGdp = countries.reduce(
+        (sum, country) => sum + (country.gdp ?? 0),
+        0
+    );
+
+    const countriesWithLifeExpectancy = countries.filter(
+        country => country.lifeExpectancy != null
+    );
+
+    const totalLifeExpectancy = countries.reduce(
+        (sum, country) => sum + country.lifeExpectancy,
+        0
+    );
+
+    const averageLifeExpectancy =
+        countriesWithLifeExpectancy.length > 0
+            ? totalLifeExpectancy / countriesWithLifeExpectancy.length
+            : 0;
 
     if(loading) {
         return <p>Loading...</p>
@@ -72,7 +97,22 @@ function WorldBankDashboard() {
 
     return(
         <div>
-            <h2>World Bank Dashboard</h2>
+            <div className="kpi-container">
+                <KpiCard
+                    title="Total GDP"
+                    value={`$${(totalGdp / 1_000_000_000_000).toFixed(2)} T`}
+                />
+
+                <KpiCard
+                    title="Population"
+                    value={`${(totalPopulation / 1_000_000_000).toFixed(2)} B`}
+                />
+
+                <KpiCard
+                    title="Life Expectancy"
+                    value={`${averageLifeExpectancy.toFixed(1)} years`}
+                />
+            </div>
             
             <CountryTable 
                 countries={sortedCountries}
