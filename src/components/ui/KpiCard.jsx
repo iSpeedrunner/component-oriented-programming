@@ -1,6 +1,8 @@
-function KpiCard({ title, value, change}) {
+import './KpiCard.css'
+
+function KpiCard({ title, value, change }) {
     const isNegative = change && change.trim().startsWith('-');
-    
+
     return (
         <div className="kpi-card">
             <h3 className="kpi-title">{title}</h3>

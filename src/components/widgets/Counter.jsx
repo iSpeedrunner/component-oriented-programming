@@ -1,29 +1,32 @@
 import { useState } from 'react'
 import './Counter.css'
 
-function Counter () {
-    const [count, setCount] = useState(3);
+function Counter({
+    title = 'Number of items',
+    initialValue = 0,
+    min = 0,
+    max = 10,
+    step = 1,
+    itemLabel = 'items',
+}) {
+    const [count, setCount] = useState(initialValue);
 
     const increment = () => {
-        if(count < 10) {
-            setCount(count + 1);    
-        }
+        setCount(currentCount => Math.min(currentCount + step, max));
     }
 
     const decrement = () => {
-        if(count > 1) {
-            setCount(count - 1);
-        }
+        setCount(currentCount => Math.max(currentCount - step, min));
     }
 
     const reset = () => {
-        setCount(3);
+        setCount(initialValue);
     }
 
     return (
         <div className="counter">
             <h3 className="counter-title">
-                Number of countries
+                {title}
             </h3>
 
             <div className="counter-controls">
@@ -48,7 +51,7 @@ function Counter () {
             </button>
 
             <div className="counter-description">
-                Showing top {count} countries
+                Showing top {count} {itemLabel}
             </div>
         </div>
     );
