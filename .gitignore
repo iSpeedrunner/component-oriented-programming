@@ -12,6 +12,13 @@ dist
 dist-ssr
 *.local
 
+
+# Codex agents
+/.codex/agents/
+
+# Codex generated plans
+/docs/superpowers/plans/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
