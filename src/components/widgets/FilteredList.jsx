@@ -1,5 +1,6 @@
 import './FilteredList.css'
 import { useState } from 'react'
+import { filterCountriesByRegion } from '../../utils/filterCountries.js'
 
 function FilteredList({
     title = 'Items',
@@ -9,7 +10,7 @@ function FilteredList({
 }) {
     const [region, setRegion] = useState(initialRegion);
 
-    const filteredCountries = region === 'All' ? countries : countries.filter(country => country.region === region);
+    const filteredCountries = filterCountriesByRegion(countries, region)
 
     return (
         <div className="filtered-list">
@@ -31,9 +32,9 @@ function FilteredList({
                 {filteredCountries.map(country => (
                     <div className="country-item" key={country.id}>
                         <h4>{country.name}</h4>
-                        <p><span>Region:</span> <strong>{country.region}</strong></p>
-                        <p><span>GDP:</span> <strong>{country.gdp}</strong></p>
-                        <p><span>Population:</span> <strong>{country.population}</strong></p>
+                        <p><span>Region:</span> <strong>{country.regionName ?? '—'}</strong></p>
+                        <p><span>GDP:</span> <strong>{country.gdp ?? '—'}</strong></p>
+                        <p><span>Population:</span> <strong>{country.population ?? '—'}</strong></p>
                     </div>
                 ))}
 
