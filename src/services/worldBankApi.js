@@ -105,12 +105,22 @@ export async function fetchWorldBankData({ fetchImpl = globalThis.fetch, signal 
   const commonQuery = 'format=json&per_page=400'
   const indicatorQuery = `${commonQuery}&mrnev=1`
 
-  const [countries, gdp, population, lifeExpectancy] = await Promise.all([
+  const [countriesResult, gdpResult, populationResult, lifeExpectancyResult] = await Promise.allSettled([
     requestData(`${WORLD_BANK_API_URL}/country?${commonQuery}`, fetchImpl, signal),
     requestData(`${WORLD_BANK_API_URL}/country/all/indicator/${INDICATORS.gdp}?${indicatorQuery}`, fetchImpl, signal),
     requestData(`${WORLD_BANK_API_URL}/country/all/indicator/${INDICATORS.population}?${indicatorQuery}`, fetchImpl, signal),
     requestData(`${WORLD_BANK_API_URL}/country/all/indicator/${INDICATORS.lifeExpectancy}?${indicatorQuery}`, fetchImpl, signal),
   ])
+
+  if (countriesResult.status === 'rejected') {
+    throw countriesResult.reason
+  }
+
+  const getSettledValue = result => result.status === 'fulfilled' ? result.value : []
+  const countries = countriesResult.value
+  const gdp = getSettledValue(gdpResult)
+  const population = getSettledValue(populationResult)
+  const lifeExpectancy = getSettledValue(lifeExpectancyResult)
 
   return normalizeWorldBankData(countries, { gdp, population, lifeExpectancy })
 }
