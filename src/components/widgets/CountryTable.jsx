@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import './CountryTable.css'
+import Pagination from '../ui/Pagination.jsx'
 import { formatGdp, formatLifeExpectancy, formatMetricWithYear, formatPopulation } from '../../utils/formatters.js'
 import { sortRecords } from '../../utils/sortRecords.js'
 
@@ -14,15 +15,31 @@ const columns = [
 
 function CountryTable({ records = [], isLoading = false, error = null }) {
   const [sortConfig, setSortConfig] = useState({ field: 'name', direction: 'asc' })
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
   const sortedRecords = useMemo(
     () => sortRecords(records, sortConfig.field, sortConfig.direction),
     [records, sortConfig],
   )
+  const totalPages = Math.max(1, Math.ceil(sortedRecords.length / pageSize))
+  const visiblePage = Math.min(currentPage, totalPages)
+  const pageStart = (visiblePage - 1) * pageSize
+  const pageRecords = sortedRecords.slice(pageStart, pageStart + pageSize)
 
   const changeSort = field => {
+    setCurrentPage(1)
     setSortConfig(current => current.field === field
       ? { field, direction: current.direction === 'asc' ? 'desc' : 'asc' }
       : { field, direction: 'asc' })
+  }
+
+  const changePage = page => {
+    setCurrentPage(Math.min(Math.max(page, 1), totalPages))
+  }
+
+  const changePageSize = size => {
+    setPageSize(size)
+    setCurrentPage(1)
   }
 
   return (
@@ -47,7 +64,8 @@ function CountryTable({ records = [], isLoading = false, error = null }) {
         <p className="table-state">No country data is available.</p>
       )}
 
-      {!isLoading && !error && records.length > 0 && <div className="table-scroll">
+      {!isLoading && !error && records.length > 0 && <>
+        <div className="table-scroll">
         <table>
           <caption className="sr-only">World Bank country indicators with sortable columns</caption>
           <thead>
@@ -69,7 +87,7 @@ function CountryTable({ records = [], isLoading = false, error = null }) {
             </tr>
           </thead>
           <tbody>
-            {sortedRecords.map(record => (
+            {pageRecords.map(record => (
               <tr key={record.id}>
                 <th scope="row">
                   <span className="country-name">{record.name}</span>
@@ -84,7 +102,17 @@ function CountryTable({ records = [], isLoading = false, error = null }) {
             ))}
           </tbody>
         </table>
-      </div>}
+      </div>
+
+      <Pagination
+        totalItems={sortedRecords.length}
+        pageSize={pageSize}
+        currentPage={visiblePage}
+        onPageChange={changePage}
+        onPageSizeChange={changePageSize}
+        ariaLabel="Country table pages"
+      />
+      </>}
     </section>
   )
 }
