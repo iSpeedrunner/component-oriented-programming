@@ -1,0 +1,80 @@
+.filters-panel {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 18px;
+  align-items: end;
+  margin-bottom: 24px;
+  padding: 22px 24px;
+  border: 1px solid #dce6eb;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
+}
+
+.filters-heading h2 {
+  margin: 4px 0 0;
+  color: #183b56;
+  font-size: 1.2rem;
+}
+
+.filters-reset-button {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border: 1px solid #cbdde4;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #315269;
+  cursor: pointer;
+}
+
+.filters-reset-button:hover {
+  background: #f0fdfa;
+  border-color: #99f6e4;
+}
+
+.filters-reset-button:focus-visible {
+  outline: 3px solid rgba(20, 184, 166, 0.3);
+  outline-offset: 2px;
+}
+
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.filter-field label {
+  color: #526579;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.filter-field input,
+.filter-field select {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid #cbdde4;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #315269;
+  font: inherit;
+}
+
+.filter-field input::placeholder {
+  color: #9aabba;
+}
+
+.filter-field input:focus-visible,
+.filter-field select:focus-visible {
+  outline: 3px solid rgba(20, 184, 166, 0.3);
+  outline-offset: 2px;
+  border-color: #0f766e;
+}
+
+@media (max-width: 780px) {
+  .filters-panel {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+}

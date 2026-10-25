@@ -13,7 +13,12 @@ const columns = [
   { field: 'lifeExpectancy', label: 'Life expectancy' },
 ]
 
-function CountryTable({ records = [], isLoading = false, error = null }) {
+function CountryTable({
+  records = [],
+  isLoading = false,
+  error = null,
+  emptyMessage = 'No country data is available.',
+}) {
   const [sortConfig, setSortConfig] = useState({ field: 'name', direction: 'asc' })
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
@@ -61,7 +66,7 @@ function CountryTable({ records = [], isLoading = false, error = null }) {
       )}
 
       {!isLoading && !error && records.length === 0 && (
-        <p className="table-state">No country data is available.</p>
+        <p className="table-state">{emptyMessage}</p>
       )}
 
       {!isLoading && !error && records.length > 0 && <>

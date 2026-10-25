@@ -1,49 +1,60 @@
-import { useEffect, useState } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 import KpiCard from '../components/ui/KpiCard'
 import Counter from '../components/widgets/Counter'
 import CountryTable from '../components/widgets/CountryTable'
 import Toggle from '../components/widgets/Toggle'
 import FilteredList from '../components/widgets/FilteredList'
+import FiltersPanel from '../components/widgets/FiltersPanel'
 import { fetchWorldBankData } from '../services/worldBankApi.js'
+import useFetch from '../hooks/useFetch.js'
 import { calculateDashboardMetrics } from '../utils/dashboardMetrics.js'
+import { filterCountries } from '../utils/filterCountries.js'
 import { formatGdp, formatLifeExpectancy, formatPopulation } from '../utils/formatters.js'
-import { isAbortError } from '../utils/requestErrors.js'
+import useDebounce from '../hooks/useDebounce.js'
+
+function createFilterOptions(countries, valueField, labelField) {
+  const options = []
+  const usedValues = new Set()
+
+  for (const country of countries) {
+    const value = country[valueField]
+    const label = country[labelField]
+
+    if (value && label && !usedValues.has(value)) {
+      usedValues.add(value)
+      options.push({ value, label })
+    }
+  }
+
+  return options.sort((left, right) => left.label.localeCompare(right.label))
+}
 
 function DashboardPage() {
-  const [countries, setCountries] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    const controller = typeof AbortController === 'function' ? new AbortController() : null
-
-    fetchWorldBankData({ signal: controller?.signal })
-      .then(records => {
-        if (controller?.signal.aborted) {
-          return
-        }
-
-        setCountries(records)
-        setError(null)
-        setIsLoading(false)
-      })
-      .catch(requestError => {
-        if (controller?.signal.aborted || isAbortError(requestError)) {
-          return
-        }
-
-        setError(requestError)
-        setIsLoading(false)
-      })
-
-    return () => controller?.abort()
-  }, [])
-
-  const metrics = calculateDashboardMetrics(countries)
-  const regions = [
-    'All',
-    ...new Set(countries.map(country => country.regionName).filter(Boolean)),
-  ]
+  const { data, loading: isLoading, error } = useFetch(fetchWorldBankData)
+  const countries = data ?? []
+  const { control, reset } = useForm({
+    defaultValues: {
+      search: '',
+      region: 'all',
+      incomeLevel: 'all',
+    },
+  })
+  const search = useWatch({ control, name: 'search' })
+  const region = useWatch({ control, name: 'region' })
+  const incomeLevel = useWatch({ control, name: 'incomeLevel' })
+  const debouncedSearch = useDebounce(search, 400)
+  const filteredCountries = filterCountries(countries, {
+    search: debouncedSearch,
+    region,
+    incomeLevel,
+  })
+  const metrics = calculateDashboardMetrics(filteredCountries)
+  const hasActiveFilters = Boolean(debouncedSearch?.trim())
+    || region !== 'all'
+    || incomeLevel !== 'all'
+  const regionOptions = createFilterOptions(countries, 'regionCode', 'regionName')
+  const incomeLevelOptions = createFilterOptions(countries, 'incomeLevelCode', 'incomeLevelName')
+  const regions = ['All', ...regionOptions.map(option => option.label)]
 
   const metricDescription = metric => {
     if (isLoading) {
@@ -86,6 +97,13 @@ function DashboardPage() {
         </p>
       </header>
 
+      <FiltersPanel
+        control={control}
+        regionOptions={regionOptions}
+        incomeLevelOptions={incomeLevelOptions}
+        onReset={reset}
+      />
+
       <div className="kpi-container">
         {kpiCards.map(kpi => (
           <KpiCard key={kpi.title} {...kpi} />
@@ -111,13 +129,25 @@ function DashboardPage() {
         />
       </div>
 
-      <CountryTable records={countries} isLoading={isLoading} error={error} />
+      <CountryTable
+        records={filteredCountries}
+        isLoading={isLoading}
+        error={error}
+        emptyMessage={hasActiveFilters
+          ? 'No countries match the selected filters.'
+          : 'No country data is available.'}
+      />
 
       <FilteredList
         title="Countries by region"
-        countries={countries}
+        countries={filteredCountries}
         regions={regions}
         initialRegion="All"
+        isLoading={isLoading}
+        error={error}
+        emptyMessage={hasActiveFilters
+          ? 'No countries match the selected filters.'
+          : 'No country data is available.'}
       />
     </main>
   )

@@ -8,6 +8,9 @@ function FilteredList({
     countries = [],
     regions = ['All'],
     initialRegion = 'All',
+    isLoading = false,
+    error = null,
+    emptyMessage = 'No countries match the selected filters.',
 }) {
     const [region, setRegion] = useState(initialRegion);
     const [currentPage, setCurrentPage] = useState(1);
@@ -50,7 +53,13 @@ function FilteredList({
 
             <div className="country-list">
 
-                {visibleCountries.map(country => (
+                {isLoading && <p className="country-list-empty">Loading country data...</p>}
+
+                {!isLoading && error && (
+                    <p className="country-list-empty">Unable to load country data.</p>
+                )}
+
+                {!isLoading && !error && visibleCountries.map(country => (
                     <div className="country-item" key={country.id}>
                         <h4>{country.name}</h4>
                         <p><span>Region:</span> <strong>{country.regionName ?? '—'}</strong></p>
@@ -59,16 +68,22 @@ function FilteredList({
                     </div>
                 ))}
 
+                {!isLoading && !error && filteredCountries.length === 0 && (
+                    <p className="country-list-empty">{emptyMessage}</p>
+                )}
+
             </div>
 
-            <Pagination
-                totalItems={filteredCountries.length}
-                pageSize={pageSize}
-                currentPage={visiblePage}
-                onPageChange={changePage}
-                onPageSizeChange={changePageSize}
-                ariaLabel="Filtered country list pages"
-            />
+            {!isLoading && !error && (
+                <Pagination
+                    totalItems={filteredCountries.length}
+                    pageSize={pageSize}
+                    currentPage={visiblePage}
+                    onPageChange={changePage}
+                    onPageSizeChange={changePageSize}
+                    ariaLabel="Filtered country list pages"
+                />
+            )}
 
         </div>
     )
