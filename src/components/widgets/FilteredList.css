@@ -1,46 +1,15 @@
 .filtered-list {
-  background-color: white;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   margin-top: 20px;
+  padding: 24px;
+  border: 1px solid #dce6eb;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
 }
-
-.filtered-list-title {
-  margin: 0 0 20px;
-  font-size: 18px;
-  color: #374151;
-}
-
-.filtered-list select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background-color: white;
-  color: #374151;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.country-list {
-  margin-top: 20px;
-}
-
-.country-item {
-  padding: 15px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
-
-.country-item h4 {
-  margin: 0 0 8px;
-  color: #111827;
-}
-
-.country-item p {
-  margin: 4px 0;
-  font-size: 14px;
-  color: #6b7280;
-}
+.filtered-list-title { margin: 0 0 20px; color: #183b56; font-size: 18px; }
+.filtered-list select { width: 100%; padding: 10px; border: 1px solid #cbdde4; border-radius: 10px; background: white; color: #315269; font-size: 14px; cursor: pointer; }
+.filtered-list select:focus-visible { outline: 3px solid rgba(20, 184, 166, 0.3); outline-offset: 2px; border-color: #0f766e; }
+.country-list { margin-top: 20px; }
+.country-item { margin-bottom: 10px; padding: 15px; border: 1px solid #e1ebef; border-radius: 12px; background: #fbfdfd; }
+.country-item h4 { margin: 0 0 8px; color: #183b56; }
+.country-item p { margin: 4px 0; color: #71869a; font-size: 14px; }
