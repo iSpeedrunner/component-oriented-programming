@@ -22,6 +22,13 @@ const countries = [
     region: { id: 'LCN', value: 'Latin America & Caribbean' },
     incomeLevel: { id: 'UMC', value: 'Upper middle income' },
   },
+  {
+    id: 'AND',
+    iso2Code: 'AD',
+    name: 'Andorra',
+    region: { id: 'ECS', value: 'Europe & Central Asia' },
+    incomeLevel: { id: 'HIC', value: 'High income' },
+  },
 ]
 
 test('fetchWorldBankData returns only records matching all filter parameters', async () => {
@@ -35,4 +42,46 @@ test('fetchWorldBankData returns only records matching all filter parameters', a
   })
 
   assert.deepEqual(data.map(country => country.name), ['Ukraine'])
+})
+
+test('fetchWorldBankData loads the latest population observation for Andorra', async () => {
+  const fetchImpl = async url => {
+    if (url.includes('/country?')) {
+      return response(countries)
+    }
+
+    if (url.includes('/SP.POP.TOTL') && url.includes('MRV=1')) {
+      return response([
+        {
+          countryiso3code: 'AND',
+          country: { id: 'AD', value: 'Andorra' },
+          date: '2024',
+          value: 85700,
+        },
+      ])
+    }
+
+    return response([])
+  }
+
+  const data = await fetchWorldBankData({
+    fetchImpl,
+    search: 'andorra',
+  })
+
+  assert.deepEqual(data, [{
+    id: 'AND',
+    iso2Code: 'AD',
+    name: 'Andorra',
+    regionCode: 'ECS',
+    regionName: 'Europe & Central Asia',
+    incomeLevelCode: 'HIC',
+    incomeLevelName: 'High income',
+    gdp: null,
+    gdpYear: null,
+    population: 85700,
+    populationYear: 2024,
+    lifeExpectancy: null,
+    lifeExpectancyYear: null,
+  }])
 })

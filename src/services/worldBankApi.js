@@ -109,7 +109,7 @@ export async function fetchWorldBankData({
   }
 
   const commonQuery = 'format=json&per_page=400'
-  const indicatorQuery = `${commonQuery}&mrnev=1`
+  const indicatorQuery = `${commonQuery}&MRV=1`
 
   const [countriesResult, gdpResult, populationResult, lifeExpectancyResult] = await Promise.allSettled([
     requestData(`${WORLD_BANK_API_URL}/country?${commonQuery}`, fetchImpl, signal),
