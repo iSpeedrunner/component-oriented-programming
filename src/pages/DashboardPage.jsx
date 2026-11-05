@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import KpiCard from '../components/ui/KpiCard'
 import Counter from '../components/widgets/Counter'
@@ -8,52 +9,37 @@ import FiltersPanel from '../components/widgets/FiltersPanel'
 import { fetchWorldBankData } from '../services/worldBankApi.js'
 import useFetch from '../hooks/useFetch.js'
 import { calculateDashboardMetrics } from '../utils/dashboardMetrics.js'
-import { filterCountries } from '../utils/filterCountries.js'
 import { formatGdp, formatLifeExpectancy, formatPopulation } from '../utils/formatters.js'
 import useDebounce from '../hooks/useDebounce.js'
-
-function createFilterOptions(countries, valueField, labelField) {
-  const options = []
-  const usedValues = new Set()
-
-  for (const country of countries) {
-    const value = country[valueField]
-    const label = country[labelField]
-
-    if (value && label && !usedValues.has(value)) {
-      usedValues.add(value)
-      options.push({ value, label })
-    }
-  }
-
-  return options.sort((left, right) => left.label.localeCompare(right.label))
-}
+import {
+  FILTER_DEFAULT_VALUES,
+  INCOME_LEVEL_OPTIONS,
+  REGION_OPTIONS,
+  resetFilters,
+} from '../utils/filterForm.js'
 
 function DashboardPage() {
-  const { data, loading: isLoading, error } = useFetch(fetchWorldBankData)
-  const countries = data ?? []
   const { control, reset } = useForm({
-    defaultValues: {
-      search: '',
-      region: 'all',
-      incomeLevel: 'all',
-    },
+    defaultValues: FILTER_DEFAULT_VALUES,
   })
   const search = useWatch({ control, name: 'search' })
   const region = useWatch({ control, name: 'region' })
   const incomeLevel = useWatch({ control, name: 'incomeLevel' })
-  const debouncedSearch = useDebounce(search, 400)
-  const filteredCountries = filterCountries(countries, {
-    search: debouncedSearch,
+  const filters = useMemo(() => ({
+    search,
     region,
     incomeLevel,
-  })
+  }), [search, region, incomeLevel])
+  const debouncedFilters = useDebounce(filters, 400)
+  const { data, loading: isLoading, error } = useFetch(fetchWorldBankData, debouncedFilters)
+  const countries = data ?? []
+  const filteredCountries = countries
   const metrics = calculateDashboardMetrics(filteredCountries)
-  const hasActiveFilters = Boolean(debouncedSearch?.trim())
-    || region !== 'all'
-    || incomeLevel !== 'all'
-  const regionOptions = createFilterOptions(countries, 'regionCode', 'regionName')
-  const incomeLevelOptions = createFilterOptions(countries, 'incomeLevelCode', 'incomeLevelName')
+  const hasActiveFilters = Boolean(debouncedFilters.search?.trim())
+    || debouncedFilters.region !== 'all'
+    || debouncedFilters.incomeLevel !== 'all'
+  const regionOptions = REGION_OPTIONS
+  const incomeLevelOptions = INCOME_LEVEL_OPTIONS
   const regions = ['All', ...regionOptions.map(option => option.label)]
 
   const metricDescription = metric => {
@@ -101,7 +87,7 @@ function DashboardPage() {
         control={control}
         regionOptions={regionOptions}
         incomeLevelOptions={incomeLevelOptions}
-        onReset={reset}
+        onReset={() => resetFilters(reset)}
       />
 
       <div className="kpi-container">

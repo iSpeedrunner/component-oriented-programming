@@ -1,3 +1,5 @@
+import { filterCountries } from '../utils/filterCountries.js'
+
 const WORLD_BANK_API_URL = 'https://api.worldbank.org/v2'
 
 const INDICATORS = {
@@ -97,7 +99,11 @@ async function requestData(url, fetchImpl, signal) {
   return data
 }
 
-export async function fetchWorldBankData({ fetchImpl = globalThis.fetch, signal } = {}) {
+export async function fetchWorldBankData({
+  fetchImpl = globalThis.fetch,
+  signal,
+  ...filters
+} = {}) {
   if (typeof fetchImpl !== 'function') {
     throw new Error('Fetch API is unavailable')
   }
@@ -122,5 +128,8 @@ export async function fetchWorldBankData({ fetchImpl = globalThis.fetch, signal 
   const population = getSettledValue(populationResult)
   const lifeExpectancy = getSettledValue(lifeExpectancyResult)
 
-  return normalizeWorldBankData(countries, { gdp, population, lifeExpectancy })
+  return filterCountries(
+    normalizeWorldBankData(countries, { gdp, population, lifeExpectancy }),
+    filters,
+  )
 }
