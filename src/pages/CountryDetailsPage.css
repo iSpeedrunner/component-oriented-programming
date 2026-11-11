@@ -7,18 +7,18 @@
 .back-link {
   display: inline-block;
   margin-bottom: 28px;
-  color: #0f766e;
+  color: var(--accent);
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
 .back-link:hover {
-  color: #115e59;
+  color: var(--accent-strong);
 }
 
 .back-link:focus-visible {
-  outline: 3px solid rgba(20, 184, 166, 0.3);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 4px;
   border-radius: 4px;
 }
@@ -26,21 +26,21 @@
 .country-details-header {
   margin-bottom: 24px;
   padding: 28px;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid #dce6eb;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 18px;
-  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.07);
+  box-shadow: var(--shadow-card);
 }
 
 .country-details-header h1 {
   margin: 6px 0 8px;
-  color: #183b56;
+  color: var(--text-primary);
   font-size: clamp(1.8rem, 4vw, 2.6rem);
 }
 
 .country-details-header > p:last-child {
   margin: 0;
-  color: #64748b;
+  color: var(--text-muted);
 }
 
 .country-details-grid {
@@ -52,14 +52,14 @@
 
 .country-detail-card {
   padding: 20px;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid #dce6eb;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 14px;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+  box-shadow: var(--shadow-card);
 }
 
 .country-detail-card dt {
-  color: #64748b;
+  color: var(--text-muted);
   font-size: 0.76rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -68,7 +68,7 @@
 
 .country-detail-card dd {
   margin: 8px 0 0;
-  color: #183b56;
+  color: var(--text-primary);
   font-size: 1.05rem;
   font-weight: 600;
   overflow-wrap: anywhere;
@@ -76,12 +76,12 @@
 
 .country-details-state {
   padding: 48px 20px;
-  color: #64748b;
+  color: var(--text-muted);
   text-align: center;
 }
 
 .country-details-state-error {
-  color: #b91c1c;
+  color: var(--error);
 }
 
 @media (max-width: 640px) {

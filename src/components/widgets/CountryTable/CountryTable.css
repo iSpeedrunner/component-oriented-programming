@@ -2,10 +2,10 @@
   margin-top: 24px;
   padding: 24px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid #dce6eb;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 18px;
-  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.07);
+  box-shadow: var(--shadow-card);
 }
 
 .table-heading {
@@ -18,13 +18,13 @@
 
 .table-heading h2 {
   margin: 4px 0 0;
-  color: #183b56;
+  color: var(--text-primary);
   font-size: 1.35rem;
 }
 
 .eyebrow {
   margin: 0;
-  color: #64748b;
+  color: var(--text-muted);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -32,7 +32,7 @@
 }
 
 .record-count {
-  color: #64748b;
+  color: var(--text-muted);
   font-size: 0.85rem;
   white-space: nowrap;
 }
@@ -49,15 +49,15 @@ table {
 }
 
 thead {
-  border-bottom: 1px solid #cbdde4;
-  background: #f4f9fa;
+  border-bottom: 1px solid var(--border-strong);
+  background: var(--surface-muted);
 }
 
 th,
 td {
   padding: 14px 12px;
-  border-bottom: 1px solid #edf2f4;
-  color: #526579;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
   font-size: 0.9rem;
   vertical-align: top;
 }
@@ -65,7 +65,7 @@ td {
 thead th {
   padding-top: 8px;
   padding-bottom: 10px;
-  color: #60758a;
+  color: var(--text-muted);
   font-size: 0.72rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -81,11 +81,11 @@ tbody tr {
 }
 
 tbody tr:hover {
-  background: #f0fdfa;
+  background: var(--accent-soft);
 }
 
 tbody th {
-  color: #183b56;
+  color: var(--text-primary);
   font-weight: 600;
 }
 
@@ -103,11 +103,11 @@ tbody th {
 
 .sort-button:hover,
 .sort-button:focus-visible {
-  color: #0f766e;
+  color: var(--accent);
 }
 
 .sort-button:focus-visible {
-  outline: 3px solid rgba(20, 184, 166, 0.3);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 4px;
   border-radius: 4px;
 }
@@ -119,26 +119,26 @@ tbody th {
 
 .country-link {
   display: inline-block;
-  color: #183b56;
+  color: var(--text-primary);
   text-decoration: underline;
   text-decoration-color: transparent;
   text-underline-offset: 3px;
 }
 
 .country-link:hover {
-  color: #0f766e;
+  color: var(--accent);
   text-decoration-color: currentColor;
 }
 
 .country-link:focus-visible {
-  outline: 3px solid rgba(20, 184, 166, 0.3);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 4px;
   border-radius: 4px;
 }
 
 .country-code {
   margin-top: 3px;
-  color: #94a3b8;
+  color: var(--text-subtle);
   font-size: 0.72rem;
   font-weight: 500;
   letter-spacing: 0.08em;
@@ -147,12 +147,12 @@ tbody th {
 .table-state {
   margin: 0;
   padding: 40px 12px;
-  color: #64748b;
+  color: var(--text-muted);
   text-align: center;
 }
 
 .table-state-error {
-  color: #b91c1c;
+  color: var(--error);
 }
 
 .sr-only {

@@ -5,35 +5,35 @@
   align-items: end;
   margin-bottom: 24px;
   padding: 22px 24px;
-  border: 1px solid #dce6eb;
+  border: 1px solid var(--border);
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
 }
 
 .filters-heading h2 {
   margin: 4px 0 0;
-  color: #183b56;
+  color: var(--text-primary);
   font-size: 1.2rem;
 }
 
 .filters-reset-button {
   margin-top: 12px;
   padding: 8px 12px;
-  border: 1px solid #cbdde4;
+  border: 1px solid var(--border-strong);
   border-radius: 10px;
-  background: #ffffff;
-  color: #315269;
+  background: var(--surface);
+  color: var(--text-secondary);
   cursor: pointer;
 }
 
 .filters-reset-button:hover {
-  background: #f0fdfa;
-  border-color: #99f6e4;
+  background: var(--accent-soft);
+  border-color: var(--accent-border);
 }
 
 .filters-reset-button:focus-visible {
-  outline: 3px solid rgba(20, 184, 166, 0.3);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -44,7 +44,7 @@
 }
 
 .filter-field label {
-  color: #526579;
+  color: var(--text-secondary);
   font-size: 0.8rem;
   font-weight: 700;
 }
@@ -54,22 +54,22 @@
   width: 100%;
   min-height: 42px;
   padding: 9px 12px;
-  border: 1px solid #cbdde4;
+  border: 1px solid var(--border-strong);
   border-radius: 10px;
-  background: #ffffff;
-  color: #315269;
+  background: var(--surface);
+  color: var(--text-secondary);
   font: inherit;
 }
 
 .filter-field input::placeholder {
-  color: #9aabba;
+  color: var(--text-placeholder);
 }
 
 .filter-field input:focus-visible,
 .filter-field select:focus-visible {
-  outline: 3px solid rgba(20, 184, 166, 0.3);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
-  border-color: #0f766e;
+  border-color: var(--accent);
 }
 
 @media (max-width: 780px) {
