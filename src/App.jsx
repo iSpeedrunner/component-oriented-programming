@@ -1,8 +1,17 @@
 import './App.css'
-import DashboardPage from './pages/DashboardPage'
+import { BrowserRouter, Route, Routes } from 'react-router'
+import CountryDetailsPage from './pages/CountryDetailsPage.jsx'
+import HomePage from './pages/HomePage.jsx'
 
 function App() {
-  return <DashboardPage />
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/country/:code" element={<CountryDetailsPage />} />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App
