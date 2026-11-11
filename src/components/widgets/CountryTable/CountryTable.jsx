@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import './CountryTable.css'
 import Pagination from '../../ui/Pagination/Pagination.jsx'
 import { formatGdp, formatLifeExpectancy, formatMetricWithYear, formatPopulation } from '../../../utils/formatters.js'
@@ -20,6 +20,7 @@ function CountryTable({
   error = null,
   emptyMessage = 'No country data is available.',
 }) {
+  const navigate = useNavigate()
   const [sortConfig, setSortConfig] = useState({ field: 'name', direction: 'asc' })
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
@@ -94,9 +95,13 @@ function CountryTable({
           </thead>
           <tbody>
             {pageRecords.map(record => (
-              <tr key={record.id}>
+              <tr key={record.id} onClick={() => navigate(`/country/${record.id}`)}>
                 <th scope="row">
-                  <Link className="country-link" to={`/country/${record.id}`}>
+                  <Link
+                    className="country-link"
+                    to={`/country/${record.id}`}
+                    onClick={event => event.stopPropagation()}
+                  >
                     <span className="country-name">{record.name}</span>
                   </Link>
                   <span className="country-code">{record.iso2Code ?? '—'}</span>
