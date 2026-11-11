@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { Link } from 'react-router'
 import './CountryTable.css'
 import Pagination from '../../ui/Pagination/Pagination.jsx'
 import { formatGdp, formatLifeExpectancy, formatMetricWithYear, formatPopulation } from '../../../utils/formatters.js'
@@ -95,7 +96,9 @@ function CountryTable({
             {pageRecords.map(record => (
               <tr key={record.id}>
                 <th scope="row">
-                  <span className="country-name">{record.name}</span>
+                  <Link className="country-link" to={`/country/${record.id}`}>
+                    <span className="country-name">{record.name}</span>
+                  </Link>
                   <span className="country-code">{record.iso2Code ?? '—'}</span>
                 </th>
                 <td>{record.regionName ?? '—'}</td>

@@ -113,6 +113,25 @@ tbody th {
   display: block;
 }
 
+.country-link {
+  display: inline-block;
+  color: #183b56;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+}
+
+.country-link:hover {
+  color: #0f766e;
+  text-decoration-color: currentColor;
+}
+
+.country-link:focus-visible {
+  outline: 3px solid rgba(20, 184, 166, 0.3);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
 .country-code {
   margin-top: 3px;
   color: #94a3b8;
