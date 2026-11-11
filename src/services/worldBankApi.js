@@ -28,6 +28,15 @@ const normalizeYear = value => {
   return Number.isInteger(year) ? year : null
 }
 
+const normalizeCoordinate = value => {
+  if (value === null || value === undefined || value === '') {
+    return null
+  }
+
+  const coordinate = Number(value)
+  return Number.isFinite(coordinate) ? coordinate : null
+}
+
 const createIndicatorMap = (rows = []) => {
   const indicatorMap = new Map()
 
@@ -82,6 +91,25 @@ export function normalizeWorldBankData(countries, indicators) {
     })
 }
 
+export function normalizeCountryDetails(country) {
+  if (!country || typeof country !== 'object') {
+    return null
+  }
+
+  return {
+    id: country.id ?? null,
+    iso2Code: country.iso2Code ?? null,
+    name: country.name ?? null,
+    regionName: country.region?.value ?? null,
+    adminRegionName: country.adminregion?.value ?? null,
+    incomeLevelName: country.incomeLevel?.value ?? null,
+    capitalCity: country.capitalCity ?? null,
+    lendingTypeName: country.lendingType?.value ?? null,
+    latitude: normalizeCoordinate(country.latitude),
+    longitude: normalizeCoordinate(country.longitude),
+  }
+}
+
 async function requestData(url, fetchImpl, signal) {
   const response = await fetchImpl(url, { signal })
 
@@ -97,6 +125,28 @@ async function requestData(url, fetchImpl, signal) {
   }
 
   return data
+}
+
+export async function fetchCountryDetails({
+  code,
+  fetchImpl = globalThis.fetch,
+  signal,
+} = {}) {
+  if (typeof fetchImpl !== 'function') {
+    throw new Error('Fetch API is unavailable')
+  }
+
+  if (typeof code !== 'string' || !code.trim()) {
+    throw new Error('Country code is required')
+  }
+
+  const data = await requestData(
+    `${WORLD_BANK_API_URL}/country/${encodeURIComponent(code.trim())}?format=json`,
+    fetchImpl,
+    signal,
+  )
+
+  return normalizeCountryDetails(data[0])
 }
 
 export async function fetchWorldBankData({
