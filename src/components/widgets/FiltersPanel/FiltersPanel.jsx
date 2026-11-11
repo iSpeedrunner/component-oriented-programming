@@ -1,17 +1,17 @@
 import { Controller } from 'react-hook-form'
+import { useFilters } from '../../../context/useFilters.js'
 import {
+  INCOME_LEVEL_OPTIONS,
+  REGION_OPTIONS,
   normalizeIncomeLevel,
   normalizeLiveSearch,
   normalizeRegion,
 } from '../../../utils/filterCountries.js'
 import './FiltersPanel.css'
 
-function FiltersPanel({
-  control,
-  regionOptions = [],
-  incomeLevelOptions = [],
-  onReset,
-}) {
+function FiltersPanel() {
+  const { control, resetFilters } = useFilters()
+
   return (
     <div className="filters-panel">
       <div className="filters-heading">
@@ -20,7 +20,7 @@ function FiltersPanel({
         <button
           className="filters-reset-button"
           type="button"
-          onClick={onReset}
+          onClick={resetFilters}
         >
           Скинути фільтри
         </button>
@@ -63,7 +63,7 @@ function FiltersPanel({
               ref={field.ref}
             >
               <option value="all">Усі регіони</option>
-              {regionOptions.map(option => (
+              {REGION_OPTIONS.map(option => (
                 <option value={option.value} key={option.value}>
                   {option.label}
                 </option>
@@ -89,7 +89,7 @@ function FiltersPanel({
               ref={field.ref}
             >
               <option value="all">Усі рівні доходу</option>
-              {incomeLevelOptions.map(option => (
+              {INCOME_LEVEL_OPTIONS.map(option => (
                 <option value={option.value} key={option.value}>
                   {option.label}
                 </option>

@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
 import KpiCard from '../components/ui/KpiCard/KpiCard.jsx'
 import Counter from '../components/widgets/Counter/Counter.jsx'
 import CountryTable from '../components/widgets/CountryTable/CountryTable.jsx'
@@ -11,25 +9,11 @@ import useFetch from '../hooks/useFetch.js'
 import { calculateDashboardMetrics } from '../utils/dashboardMetrics.js'
 import { formatGdp, formatLifeExpectancy, formatPopulation } from '../utils/formatters.js'
 import useDebounce from '../hooks/useDebounce.js'
-import {
-  FILTER_DEFAULT_VALUES,
-  INCOME_LEVEL_OPTIONS,
-  REGION_OPTIONS,
-  resetFilters,
-} from '../utils/filterCountries.js'
+import { REGION_OPTIONS } from '../utils/filterCountries.js'
+import { useFilters } from '../context/useFilters.js'
 
 function DashboardPage() {
-  const { control, reset } = useForm({
-    defaultValues: FILTER_DEFAULT_VALUES,
-  })
-  const search = useWatch({ control, name: 'search' })
-  const region = useWatch({ control, name: 'region' })
-  const incomeLevel = useWatch({ control, name: 'incomeLevel' })
-  const filters = useMemo(() => ({
-    search,
-    region,
-    incomeLevel,
-  }), [search, region, incomeLevel])
+  const { filters } = useFilters()
   const debouncedFilters = useDebounce(filters, 400)
   const { data, loading: isLoading, error } = useFetch(fetchWorldBankData, debouncedFilters)
   const countries = data ?? []
@@ -39,7 +23,6 @@ function DashboardPage() {
     || debouncedFilters.region !== 'all'
     || debouncedFilters.incomeLevel !== 'all'
   const regionOptions = REGION_OPTIONS
-  const incomeLevelOptions = INCOME_LEVEL_OPTIONS
   const regions = ['All', ...regionOptions.map(option => option.label)]
 
   const metricDescription = metric => {
@@ -83,12 +66,7 @@ function DashboardPage() {
         </p>
       </header>
 
-      <FiltersPanel
-        control={control}
-        regionOptions={regionOptions}
-        incomeLevelOptions={incomeLevelOptions}
-        onReset={() => resetFilters(reset)}
-      />
+      <FiltersPanel />
 
       <div className="kpi-container">
         {kpiCards.map(kpi => (
