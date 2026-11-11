@@ -32,10 +32,16 @@ export function normalizeIncomeLevel(value) {
   return incomeLevelCodes.has(value) ? value : 'all'
 }
 
+function stripSearchControls(value) {
+  return typeof value === 'string' ? value.replace(/\p{Cc}/gu, '') : ''
+}
+
+export function normalizeLiveSearch(value) {
+  return stripSearchControls(value).slice(0, 100)
+}
+
 export function normalizeSearch(value) {
-  return typeof value === 'string'
-    ? value.replace(/\p{Cc}/gu, '').trim().slice(0, 100)
-    : ''
+  return stripSearchControls(value).trim().slice(0, 100)
 }
 
 export function filterCountriesByRegion(countries, region) {

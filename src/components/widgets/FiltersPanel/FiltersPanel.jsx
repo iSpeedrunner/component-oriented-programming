@@ -1,8 +1,8 @@
 import { Controller } from 'react-hook-form'
 import {
   normalizeIncomeLevel,
+  normalizeLiveSearch,
   normalizeRegion,
-  normalizeSearch,
 } from '../../../utils/filterCountries.js'
 import './FiltersPanel.css'
 
@@ -38,7 +38,7 @@ function FiltersPanel({
               name={field.name}
               type="text"
               value={field.value}
-              onChange={event => field.onChange(normalizeSearch(event.target.value))}
+              onChange={event => field.onChange(normalizeLiveSearch(event.target.value))}
               onBlur={field.onBlur}
               ref={field.ref}
               placeholder="Введіть назву країни"

@@ -4,6 +4,7 @@ import { createFormControl } from 'react-hook-form'
 import {
   FILTER_DEFAULT_VALUES,
   filterCountries,
+  normalizeLiveSearch,
   resetFilters,
 } from '../src/utils/filterCountries.js'
 
@@ -12,6 +13,17 @@ const countries = [
   { name: 'Andorra', regionCode: 'ECS', incomeLevelCode: 'HIC' },
   { name: 'Brazil', regionCode: 'LCN', incomeLevelCode: 'UMC' },
 ]
+
+test('live search keeps typed spaces while removing controls and limiting length', () => {
+  assert.equal(normalizeLiveSearch('New '), 'New ')
+  assert.equal(normalizeLiveSearch('New Zealand'), 'New Zealand')
+  assert.equal(normalizeLiveSearch('New\n Zealand\u0000'), 'New Zealand')
+  assert.equal(normalizeLiveSearch('N'.repeat(101)), 'N'.repeat(100))
+  assert.equal(normalizeLiveSearch({ toString: () => 'New Zealand' }), '')
+
+  const newZealand = { name: 'New Zealand', regionCode: 'EAS', incomeLevelCode: 'HIC' }
+  assert.deepEqual(filterCountries([newZealand], { search: ' New Zealand ' }), [newZealand])
+})
 
 test('valid region and income codes restrict direct filtering', () => {
   assert.deepEqual(filterCountries(countries, { region: 'ECS', incomeLevel: 'UMC' }), [countries[0]])
