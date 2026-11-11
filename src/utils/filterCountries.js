@@ -21,6 +21,23 @@ export const INCOME_LEVEL_OPTIONS = Object.freeze([
   { value: 'UMC', label: 'Upper middle income' },
 ])
 
+const regionCodes = new Set(REGION_OPTIONS.map(option => option.value))
+const incomeLevelCodes = new Set(INCOME_LEVEL_OPTIONS.map(option => option.value))
+
+export function normalizeRegion(value) {
+  return regionCodes.has(value) ? value : 'all'
+}
+
+export function normalizeIncomeLevel(value) {
+  return incomeLevelCodes.has(value) ? value : 'all'
+}
+
+export function normalizeSearch(value) {
+  return typeof value === 'string'
+    ? value.replace(/\p{Cc}/gu, '').trim().slice(0, 100)
+    : ''
+}
+
 export function filterCountriesByRegion(countries, region) {
   return region === 'All'
     ? countries
@@ -28,9 +45,9 @@ export function filterCountriesByRegion(countries, region) {
 }
 
 export function filterCountries(countries, filters = {}) {
-  const search = (filters.search ?? '').trim().toLowerCase()
-  const region = filters.region ?? 'all'
-  const incomeLevel = filters.incomeLevel ?? 'all'
+  const search = normalizeSearch(filters.search).toLowerCase()
+  const region = normalizeRegion(filters.region)
+  const incomeLevel = normalizeIncomeLevel(filters.incomeLevel)
 
   return countries.filter(country => {
     const matchesSearch = !search || country.name.toLowerCase().includes(search)

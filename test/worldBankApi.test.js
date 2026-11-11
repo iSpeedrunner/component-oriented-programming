@@ -44,6 +44,19 @@ test('fetchWorldBankData returns only records matching all filter parameters', a
   assert.deepEqual(data.map(country => country.name), ['Ukraine'])
 })
 
+test('fetchWorldBankData normalizes untrusted filters before matching', async () => {
+  const fetchImpl = async url => response(url.includes('/country?') ? countries : [])
+
+  const data = await fetchWorldBankData({
+    fetchImpl,
+    search: '  Ukr\naine  ',
+    region: "ECS' OR 1=1 --",
+    incomeLevel: '<script>alert(1)</script>',
+  })
+
+  assert.deepEqual(data.map(country => country.name), ['Ukraine'])
+})
+
 test('fetchWorldBankData loads the latest population observation for Andorra', async () => {
   const fetchImpl = async url => {
     if (url.includes('/country?')) {

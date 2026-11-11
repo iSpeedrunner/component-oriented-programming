@@ -1,4 +1,9 @@
 import { Controller } from 'react-hook-form'
+import {
+  normalizeIncomeLevel,
+  normalizeRegion,
+  normalizeSearch,
+} from '../../../utils/filterCountries.js'
 import './FiltersPanel.css'
 
 function FiltersPanel({
@@ -33,7 +38,7 @@ function FiltersPanel({
               name={field.name}
               type="text"
               value={field.value}
-              onChange={field.onChange}
+              onChange={event => field.onChange(normalizeSearch(event.target.value))}
               onBlur={field.onBlur}
               ref={field.ref}
               placeholder="Введіть назву країни"
@@ -53,7 +58,7 @@ function FiltersPanel({
               id="region-filter"
               name={field.name}
               value={field.value}
-              onChange={field.onChange}
+              onChange={event => field.onChange(normalizeRegion(event.target.value))}
               onBlur={field.onBlur}
               ref={field.ref}
             >
@@ -79,7 +84,7 @@ function FiltersPanel({
               id="income-level-filter"
               name={field.name}
               value={field.value}
-              onChange={field.onChange}
+              onChange={event => field.onChange(normalizeIncomeLevel(event.target.value))}
               onBlur={field.onBlur}
               ref={field.ref}
             >
