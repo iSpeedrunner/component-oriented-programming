@@ -1,7 +1,7 @@
 import './FilteredList.css'
 import { useState } from 'react'
-import Pagination from '../ui/Pagination.jsx'
-import { filterCountriesByRegion } from '../../utils/filterCountries.js'
+import Pagination from '../../ui/Pagination/Pagination.jsx'
+import { filterCountriesByRegion } from '../../../utils/filterCountries.js'
 
 function FilteredList({
     title = 'Items',

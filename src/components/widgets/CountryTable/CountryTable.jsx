@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
 import './CountryTable.css'
-import Pagination from '../ui/Pagination.jsx'
-import { formatGdp, formatLifeExpectancy, formatMetricWithYear, formatPopulation } from '../../utils/formatters.js'
-import { sortRecords } from '../../utils/sortRecords.js'
+import Pagination from '../../ui/Pagination/Pagination.jsx'
+import { formatGdp, formatLifeExpectancy, formatMetricWithYear, formatPopulation } from '../../../utils/formatters.js'
+import { sortRecords } from '../../../utils/sortRecords.js'
 
 const columns = [
   { field: 'name', label: 'Country' },
