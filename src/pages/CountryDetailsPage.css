@@ -84,6 +84,16 @@
   color: var(--error);
 }
 
+.country-details-state-not-found h1 {
+  margin: 0 0 8px;
+  color: var(--text-primary);
+}
+
+.country-details-state-not-found p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
 @media (max-width: 640px) {
   .country-details-page {
     width: min(100% - 24px, 1180px);

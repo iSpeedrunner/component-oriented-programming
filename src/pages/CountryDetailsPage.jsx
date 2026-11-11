@@ -2,14 +2,14 @@ import { useMemo } from 'react'
 import { Link, useParams } from 'react-router'
 import './CountryDetailsPage.css'
 import useFetch from '../hooks/useFetch.js'
-import { fetchCountryDetails } from '../services/worldBankApi.js'
+import { CountryNotFoundError, fetchCountryDetails } from '../services/worldBankApi.js'
 
 const valueOrPlaceholder = value => value ?? 'Not available'
 
-function CountryDetailsPage() {
-  const { code } = useParams()
+function CountryDetailsView({ code }) {
   const requestParams = useMemo(() => ({ code }), [code])
   const { data: country, loading, error } = useFetch(fetchCountryDetails, requestParams)
+  const isNotFound = error instanceof CountryNotFoundError
 
   const details = country ? [
     ['Country name', country.name],
@@ -30,9 +30,16 @@ function CountryDetailsPage() {
 
       {loading && <p className="country-details-state">Loading country information…</p>}
 
-      {!loading && error && (
+      {!loading && isNotFound && (
+        <div className="country-details-state country-details-state-not-found">
+          <h1>Country not found</h1>
+          <p>The requested country code could not be found: {code}</p>
+        </div>
+      )}
+
+      {!loading && error && !isNotFound && (
         <p className="country-details-state country-details-state-error">
-          We couldn’t load country information. {error.message}
+          Unable to load country information. {error.message}
         </p>
       )}
 
@@ -60,6 +67,12 @@ function CountryDetailsPage() {
       )}
     </main>
   )
+}
+
+function CountryDetailsPage() {
+  const { code } = useParams()
+
+  return <CountryDetailsView key={code} code={code} />
 }
 
 export default CountryDetailsPage

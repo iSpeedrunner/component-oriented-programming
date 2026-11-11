@@ -58,6 +58,13 @@ const createIndicatorMap = (rows = []) => {
 
 const emptyIndicator = { value: null, year: null }
 
+export class CountryNotFoundError extends Error {
+  constructor(code) {
+    super(`Country "${code}" was not found`)
+    this.name = 'CountryNotFoundError'
+  }
+}
+
 export function normalizeWorldBankData(countries, indicators) {
   const maps = {
     gdp: createIndicatorMap(indicators?.gdp),
@@ -127,6 +134,39 @@ async function requestData(url, fetchImpl, signal) {
   return data
 }
 
+const isInvalidCountryResponse = payload => {
+  const messages = Array.isArray(payload) ? payload[0]?.message : null
+
+  return Array.isArray(messages) && messages.some(message => (
+    String(message?.id) === '120'
+    && /invalid value/i.test(message?.key ?? '')
+  ))
+}
+
+async function requestCountryDetailsData(url, fetchImpl, signal, code) {
+  const response = await fetchImpl(url, { signal })
+
+  if (response.status === 404) {
+    throw new CountryNotFoundError(code)
+  }
+
+  if (!response.ok) {
+    throw new Error(`World Bank API request failed (${response.status})`)
+  }
+
+  const payload = await response.json()
+
+  if (isInvalidCountryResponse(payload)) {
+    throw new CountryNotFoundError(code)
+  }
+
+  if (!Array.isArray(payload) || !Array.isArray(payload[1])) {
+    throw new Error('World Bank API returned an invalid country response')
+  }
+
+  return payload[1]
+}
+
 export async function fetchCountryDetails({
   code,
   fetchImpl = globalThis.fetch,
@@ -140,13 +180,26 @@ export async function fetchCountryDetails({
     throw new Error('Country code is required')
   }
 
-  const data = await requestData(
-    `${WORLD_BANK_API_URL}/country/${encodeURIComponent(code.trim())}?format=json`,
+  const normalizedCode = code.trim()
+  const data = await requestCountryDetailsData(
+    `${WORLD_BANK_API_URL}/country/${encodeURIComponent(normalizedCode)}?format=json`,
     fetchImpl,
     signal,
+    normalizedCode,
   )
 
-  return normalizeCountryDetails(data[0])
+  if (data.length === 0) {
+    throw new CountryNotFoundError(normalizedCode)
+  }
+
+  const country = data[0]
+
+  if (!country || typeof country !== 'object'
+    || typeof country.id !== 'string' || typeof country.name !== 'string') {
+    throw new Error('World Bank API returned an invalid country record')
+  }
+
+  return normalizeCountryDetails(country)
 }
 
 export async function fetchWorldBankData({
