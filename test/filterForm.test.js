@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import { createFormControl } from 'react-hook-form'
-import { FILTER_DEFAULT_VALUES, resetFilters } from '../src/utils/filterForm.js'
+import { FILTER_DEFAULT_VALUES, resetFilters } from '../src/utils/filterCountries.js'
 
 test('resetFilters restores every filter default without using a click event as values', () => {
   const form = createFormControl({ defaultValues: FILTER_DEFAULT_VALUES })

@@ -16,7 +16,7 @@ import {
   INCOME_LEVEL_OPTIONS,
   REGION_OPTIONS,
   resetFilters,
-} from '../utils/filterForm.js'
+} from '../utils/filterCountries.js'
 
 function DashboardPage() {
   const { control, reset } = useForm({
