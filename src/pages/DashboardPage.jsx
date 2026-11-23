@@ -1,5 +1,8 @@
+import { useDispatch, useSelector } from 'react-redux'
+import ChartTypeSwitcher from '../components/ui/ChartTypeSwitcher/ChartTypeSwitcher.jsx'
 import KpiCard from '../components/ui/KpiCard/KpiCard.jsx'
 import Counter from '../components/widgets/Counter/Counter.jsx'
+import CountryChart from '../components/widgets/CountryChart/CountryChart.jsx'
 import CountryTable from '../components/widgets/CountryTable/CountryTable.jsx'
 import Toggle from '../components/widgets/Toggle/Toggle.jsx'
 import FilteredList from '../components/widgets/FilteredList/FilteredList.jsx'
@@ -10,15 +13,20 @@ import { calculateDashboardMetrics } from '../utils/dashboardMetrics.js'
 import { formatGdp, formatLifeExpectancy, formatPopulation } from '../utils/formatters.js'
 import useDebounce from '../hooks/useDebounce.js'
 import { REGION_OPTIONS } from '../utils/filterCountries.js'
-import { useFilters } from '../context/useFilters.js'
+import { prepareIncomeDistribution } from '../utils/prepareIncomeDistribution.js'
+import { selectChartType, setChartType } from '../store/chartSlice.js'
+import { selectFilters } from '../store/filtersSlice.js'
 
 function DashboardPage() {
-  const { filters } = useFilters()
+  const dispatch = useDispatch()
+  const chartType = useSelector(selectChartType)
+  const filters = useSelector(selectFilters)
   const debouncedFilters = useDebounce(filters, 400)
   const { data, loading: isLoading, error } = useFetch(fetchWorldBankData, debouncedFilters)
   const countries = data ?? []
   const filteredCountries = countries
   const metrics = calculateDashboardMetrics(filteredCountries)
+  const incomeDistribution = prepareIncomeDistribution(filteredCountries)
   const hasActiveFilters = Boolean(debouncedFilters.search?.trim())
     || debouncedFilters.region !== 'all'
     || debouncedFilters.incomeLevel !== 'all'
@@ -73,6 +81,19 @@ function DashboardPage() {
           <KpiCard key={kpi.title} {...kpi} />
         ))}
       </div>
+
+      <CountryChart
+        data={incomeDistribution}
+        type={chartType}
+        isLoading={isLoading}
+        error={error}
+        controls={
+          <ChartTypeSwitcher
+            value={chartType}
+            onChange={type => dispatch(setChartType(type))}
+          />
+        }
+      />
 
       <div className="legacy-widgets">
         <Counter

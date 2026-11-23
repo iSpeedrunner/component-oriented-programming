@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import './CountryTable.css'
+import FavoriteButton from '../../ui/FavoriteButton/FavoriteButton.jsx'
 import Pagination from '../../ui/Pagination/Pagination.jsx'
 import { formatGdp, formatLifeExpectancy, formatMetricWithYear, formatPopulation } from '../../../utils/formatters.js'
 import { sortRecords } from '../../../utils/sortRecords.js'
@@ -97,14 +98,19 @@ function CountryTable({
             {pageRecords.map(record => (
               <tr key={record.id} onClick={() => navigate(`/country/${record.id}`)}>
                 <th scope="row">
-                  <Link
-                    className="country-link"
-                    to={`/country/${record.id}`}
-                    onClick={event => event.stopPropagation()}
-                  >
-                    <span className="country-name">{record.name}</span>
-                  </Link>
-                  <span className="country-code">{record.iso2Code ?? '—'}</span>
+                  <div className="country-cell">
+                    <div>
+                      <Link
+                        className="country-link"
+                        to={`/country/${record.id}`}
+                        onClick={event => event.stopPropagation()}
+                      >
+                        <span className="country-name">{record.name}</span>
+                      </Link>
+                      <span className="country-code">{record.iso2Code ?? '—'}</span>
+                    </div>
+                    <FavoriteButton countryId={record.countryId} countryName={record.name} />
+                  </div>
                 </th>
                 <td>{record.regionName ?? '—'}</td>
                 <td>{record.incomeLevelName ?? '—'}</td>

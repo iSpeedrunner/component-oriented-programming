@@ -1,11 +1,16 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { createFormControl } from 'react-hook-form'
 import {
-  FILTER_DEFAULT_VALUES,
+  resetFilters,
+  selectFilters,
+  setIncomeLevel,
+  setRegion,
+  setSearch,
+} from '../src/store/filtersSlice.js'
+import { store } from '../src/store/store.js'
+import {
   filterCountries,
   normalizeLiveSearch,
-  resetFilters,
 } from '../src/utils/filterCountries.js'
 
 const countries = [
@@ -50,17 +55,22 @@ test('search is capped at 100 characters after trimming', () => {
   }).map(country => country.name), [longName])
 })
 
-test('resetFilters restores every filter default without using a click event as values', () => {
-  const form = createFormControl({ defaultValues: FILTER_DEFAULT_VALUES })
+test('Redux filter actions normalize input and reset all active filters together', () => {
+  store.dispatch(setSearch('New\n Zealand '))
+  store.dispatch(setRegion('EAS'))
+  store.dispatch(setIncomeLevel('HIC'))
 
-  form.register('search')
-  form.register('region')
-  form.register('incomeLevel')
-  form.setValue('search', 'Ukraine')
-  form.setValue('region', 'ECS')
-  form.setValue('incomeLevel', 'UMC')
+  assert.deepEqual(selectFilters(store.getState()), {
+    search: 'New Zealand ',
+    region: 'EAS',
+    incomeLevel: 'HIC',
+  })
 
-  resetFilters(form.reset)
+  store.dispatch(resetFilters())
 
-  assert.deepEqual(form.getValues(), FILTER_DEFAULT_VALUES)
+  assert.deepEqual(selectFilters(store.getState()), {
+    search: '',
+    region: 'all',
+    incomeLevel: 'all',
+  })
 })

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { fetchWorldBankData } from '../src/services/worldBankApi.js'
+import { fetchCountryDetails, fetchWorldBankData } from '../src/services/worldBankApi.js'
 
 const response = data => ({
   ok: true,
@@ -57,6 +57,24 @@ test('fetchWorldBankData normalizes untrusted filters before matching', async ()
   assert.deepEqual(data.map(country => country.name), ['Ukraine'])
 })
 
+test('Favorites use the API country code shared by both views, with no fallback to the row key', async () => {
+  const countryWithoutCode = { iso2Code: 'NZ', name: 'New Zealand' }
+  const fetchImpl = async url => {
+    const path = new URL(url).pathname
+    if (path === '/v2/country') return response([countries[0], countryWithoutCode])
+    if (path === '/v2/country/UA') return response([countries[0]])
+    return response([])
+  }
+
+  const [ukraine, newZealand] = await fetchWorldBankData({ fetchImpl })
+  const details = await fetchCountryDetails({ code: 'UA', fetchImpl })
+
+  assert.equal(ukraine.countryId, 'UKR')
+  assert.equal(details.id, ukraine.countryId)
+  assert.equal(newZealand.id, 'NZ')
+  assert.equal(newZealand.countryId, null)
+})
+
 test('fetchWorldBankData loads the latest population observation for Andorra', async () => {
   const fetchImpl = async url => {
     if (url.includes('/country?')) {
@@ -84,6 +102,7 @@ test('fetchWorldBankData loads the latest population observation for Andorra', a
 
   assert.deepEqual(data, [{
     id: 'AND',
+    countryId: 'AND',
     iso2Code: 'AD',
     name: 'Andorra',
     regionCode: 'ECS',

@@ -1,0 +1,65 @@
+.income-pie-chart {
+  --income-pie-upper-middle: #3d67b1;
+  --income-pie-lower-middle: #93559f;
+  --income-pie-low: #ac5e17;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 16px;
+}
+
+:root[data-theme='dark'] .income-pie-chart {
+  --income-pie-upper-middle: #8aaff4;
+  --income-pie-lower-middle: #d291df;
+  --income-pie-low: #f5ad63;
+}
+
+.income-pie-legend {
+  width: 100%;
+  max-width: 28rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+.income-pie-legend li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.income-pie-legend li:last-child {
+  border-bottom: 0;
+}
+
+.income-pie-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.income-pie-category {
+  overflow-wrap: anywhere;
+}
+
+.income-pie-values {
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.income-pie-values strong {
+  color: var(--text-primary);
+}
+
+@media (max-width: 640px) {
+  .income-pie-chart {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+}

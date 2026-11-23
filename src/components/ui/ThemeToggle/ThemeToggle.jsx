@@ -1,15 +1,17 @@
-import { useTheme } from '../../../context/useTheme.js'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectTheme, toggleTheme } from '../../../store/themeSlice.js'
 import './ThemeToggle.css'
 
 function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme()
+  const theme = useSelector(selectTheme)
+  const dispatch = useDispatch()
   const nextTheme = theme === 'light' ? 'dark' : 'light'
 
   return (
     <button
       className="theme-toggle"
       type="button"
-      onClick={toggleTheme}
+      onClick={() => dispatch(toggleTheme())}
       aria-label={`Switch to ${nextTheme} theme`}
     >
       <span aria-hidden="true">{theme === 'light' ? '☾' : '☀'}</span>

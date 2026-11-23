@@ -82,6 +82,7 @@ export function normalizeWorldBankData(countries, indicators) {
 
       return {
         id: countryKey,
+        countryId: country.id ?? null,
         iso2Code: country.iso2Code ?? null,
         name: country.name ?? 'Unknown country',
         regionCode: country.region?.id ?? null,

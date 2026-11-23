@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Link, useParams } from 'react-router'
 import './CountryDetailsPage.css'
+import FavoriteButton from '../components/ui/FavoriteButton/FavoriteButton.jsx'
 import useFetch from '../hooks/useFetch.js'
 import { CountryNotFoundError, fetchCountryDetails } from '../services/worldBankApi.js'
 
@@ -51,7 +52,10 @@ function CountryDetailsView({ code }) {
         <>
           <header className="country-details-header">
             <p className="eyebrow">World Bank country profile</p>
-            <h1>{valueOrPlaceholder(country.name)}</h1>
+            <div className="country-details-title">
+              <h1>{valueOrPlaceholder(country.name)}</h1>
+              <FavoriteButton countryId={country.id} countryName={country.name} />
+            </div>
             <p>Country code: {valueOrPlaceholder(code)}</p>
           </header>
 

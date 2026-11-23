@@ -63,7 +63,3 @@ export function filterCountries(countries, filters = {}) {
     return matchesSearch && matchesRegion && matchesIncomeLevel
   })
 }
-
-export function resetFilters(reset) {
-  reset(FILTER_DEFAULT_VALUES)
-}

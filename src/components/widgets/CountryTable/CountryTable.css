@@ -112,6 +112,13 @@ tbody th {
   border-radius: 4px;
 }
 
+.country-cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .country-name,
 .country-code {
   display: block;

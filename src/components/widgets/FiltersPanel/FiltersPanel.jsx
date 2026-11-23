@@ -1,16 +1,27 @@
-import { Controller } from 'react-hook-form'
-import { useFilters } from '../../../context/useFilters.js'
+import { Controller, useForm } from 'react-hook-form'
+import { useDispatch, useSelector } from 'react-redux'
 import {
+  resetFilters,
+  selectFilters,
+  setIncomeLevel,
+  setRegion,
+  setSearch,
+} from '../../../store/filtersSlice.js'
+import {
+  FILTER_DEFAULT_VALUES,
   INCOME_LEVEL_OPTIONS,
   REGION_OPTIONS,
-  normalizeIncomeLevel,
-  normalizeLiveSearch,
-  normalizeRegion,
 } from '../../../utils/filterCountries.js'
 import './FiltersPanel.css'
 
 function FiltersPanel() {
-  const { control, resetFilters } = useFilters()
+  const dispatch = useDispatch()
+  const filters = useSelector(selectFilters)
+  const { control } = useForm({
+    defaultValues: FILTER_DEFAULT_VALUES,
+    values: filters,
+    resetOptions: { keepDefaultValues: true },
+  })
 
   return (
     <div className="filters-panel">
@@ -20,7 +31,7 @@ function FiltersPanel() {
         <button
           className="filters-reset-button"
           type="button"
-          onClick={resetFilters}
+          onClick={() => dispatch(resetFilters())}
         >
           Скинути фільтри
         </button>
@@ -37,8 +48,8 @@ function FiltersPanel() {
               id="country-search"
               name={field.name}
               type="text"
-              value={field.value}
-              onChange={event => field.onChange(normalizeLiveSearch(event.target.value))}
+              value={filters.search}
+              onChange={event => dispatch(setSearch(event.target.value))}
               onBlur={field.onBlur}
               ref={field.ref}
               placeholder="Введіть назву країни"
@@ -57,8 +68,8 @@ function FiltersPanel() {
             <select
               id="region-filter"
               name={field.name}
-              value={field.value}
-              onChange={event => field.onChange(normalizeRegion(event.target.value))}
+              value={filters.region}
+              onChange={event => dispatch(setRegion(event.target.value))}
               onBlur={field.onBlur}
               ref={field.ref}
             >
@@ -83,8 +94,8 @@ function FiltersPanel() {
             <select
               id="income-level-filter"
               name={field.name}
-              value={field.value}
-              onChange={event => field.onChange(normalizeIncomeLevel(event.target.value))}
+              value={filters.incomeLevel}
+              onChange={event => dispatch(setIncomeLevel(event.target.value))}
               onBlur={field.onBlur}
               ref={field.ref}
             >
